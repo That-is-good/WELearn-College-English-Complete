@@ -25,6 +25,7 @@
 
 (e=>{const i=document.createElement("style");i.dataset.source="vite-plugin-monkey",i.innerText=e,document.head.appendChild(i)})(' .i-icon{display:inline-block;color:inherit;font-style:normal;line-height:0;text-align:center;text-transform:none;vertical-align:-.125em;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.i-icon-spin svg{animation:i-icon-spin 1s infinite linear}.i-icon-rtl{transform:scaleX(-1)}@keyframes i-icon-spin{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@-webkit-keyframes i-icon-spin{to{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}[data-simplebar]{position:relative;flex-direction:column;flex-wrap:wrap;justify-content:flex-start;align-content:flex-start;align-items:flex-start}.simplebar-wrapper{overflow:hidden;width:inherit;height:inherit;max-width:inherit;max-height:inherit}.simplebar-mask{direction:inherit;position:absolute;overflow:hidden;padding:0;margin:0;left:0;top:0;bottom:0;right:0;width:auto!important;height:auto!important;z-index:0}.simplebar-offset{direction:inherit!important;box-sizing:inherit!important;resize:none!important;position:absolute;top:0;left:0;bottom:0;right:0;padding:0;margin:0;-webkit-overflow-scrolling:touch}.simplebar-content-wrapper{direction:inherit;box-sizing:border-box!important;position:relative;display:block;height:100%;width:auto;max-width:100%;max-height:100%;overflow:auto;scrollbar-width:none;-ms-overflow-style:none}.simplebar-content-wrapper::-webkit-scrollbar,.simplebar-hide-scrollbar::-webkit-scrollbar{display:none;width:0;height:0}.simplebar-content:after,.simplebar-content:before{content:" ";display:table}.simplebar-placeholder{max-height:100%;max-width:100%;width:100%;pointer-events:none}.simplebar-height-auto-observer-wrapper{box-sizing:inherit!important;height:100%;width:100%;max-width:1px;position:relative;float:left;max-height:1px;overflow:hidden;z-index:-1;padding:0;margin:0;pointer-events:none;flex-grow:inherit;flex-shrink:0;flex-basis:0}.simplebar-height-auto-observer{box-sizing:inherit;display:block;opacity:0;position:absolute;top:0;left:0;height:1000%;width:1000%;min-height:1px;min-width:1px;overflow:hidden;pointer-events:none;z-index:-1}.simplebar-track{z-index:1;position:absolute;right:0;bottom:0;pointer-events:none;overflow:hidden}[data-simplebar].simplebar-dragging,[data-simplebar].simplebar-dragging .simplebar-content{pointer-events:none;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}[data-simplebar].simplebar-dragging .simplebar-track{pointer-events:all}.simplebar-scrollbar{position:absolute;left:0;right:0;min-height:10px}.simplebar-scrollbar:before{position:absolute;content:"";background:#000;border-radius:7px;left:2px;right:2px;opacity:0;transition:opacity .2s .5s linear}.simplebar-scrollbar.simplebar-visible:before{opacity:.5;transition-delay:0s;transition-duration:0s}.simplebar-track.simplebar-vertical{top:0;width:11px}.simplebar-scrollbar:before{top:2px;bottom:2px;left:2px;right:2px}.simplebar-track.simplebar-horizontal{left:0;height:11px}.simplebar-track.simplebar-horizontal .simplebar-scrollbar{right:auto;left:0;top:0;bottom:0;min-height:0;min-width:10px;width:auto}[data-simplebar-direction=rtl] .simplebar-track.simplebar-vertical{right:auto;left:0}.simplebar-dummy-scrollbar-size{direction:rtl;position:fixed;opacity:0;visibility:hidden;height:500px;width:500px;overflow-y:hidden;overflow-x:scroll;-ms-overflow-style:scrollbar!important}.simplebar-dummy-scrollbar-size>div{width:200%;height:200%;margin:10px 0}.simplebar-hide-scrollbar{position:fixed;left:0;visibility:hidden;overflow-y:scroll;scrollbar-width:none;-ms-overflow-style:none} ');
 
+var isDebug = false;
 var __defProp = Object.defineProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
 var __publicField = (obj, key, value) => {
@@ -730,7 +731,9 @@ var __publicField = (obj, key, value) => {
       this.info({ content: "即将切换题型" });
     }
     debug(...content) {
-      console.log(`[eocs-helper]`, ...content);
+      if (isDebug) {
+        console.log(`[eocs-helper]`, ...content);
+      }
     }
   }
   const logger = new Logger();
@@ -2478,7 +2481,7 @@ var __publicField = (obj, key, value) => {
 
     // 4. 强制触发保存
     // 调用此方法后，你会看到网络面板发送了 savescoinfo160928 请求
-    console.log("正在同步录音进度到服务器...");
+    logger.debug("正在同步录音进度到服务器...");
     await itemCtrl.submit(); 
     
     // 5. 广播 UI 更新，让界面上的“未完成”红点消失
@@ -2510,7 +2513,7 @@ var __publicField = (obj, key, value) => {
               const id = el.id;
               if (!id) continue;
 
-              console.log(`正在处理录音题型: ${tag}, ID: ${id}`);
+              logger.debug(`正在处理录音题型: ${tag}, ID: ${id}`);
 
               // 构造虚假的录音完成数据
               let dummyData = {};
@@ -2557,7 +2560,7 @@ var __publicField = (obj, key, value) => {
 
       // 强制执行一次脏检查
       if (!rootScope.$$phase) rootScope.$apply();
-      console.log("录音类题目已伪造完成，进度已更新。");
+      logger.debug("录音类题目已伪造完成，进度已更新。");
   }*/
   async function solveMarkTasks() {
     // 1. 查找页面中所有的标记题组件
@@ -2601,7 +2604,7 @@ var __publicField = (obj, key, value) => {
                 }
             }
         }
-        console.log(`已处理标记题: ${container.id}`);
+        logger.debug(`已处理标记题: ${container.id}`);
     }
   }
   async function solveEt(answers) {
@@ -2634,11 +2637,13 @@ var __publicField = (obj, key, value) => {
     let liOrder = 0;
     let spanOrder = 0;
     let optionOrder = 0;
+    let tofOption = void 0;
+    let targetOption, options, optionCount;
+    let spanFlag = false;
     for (const answer of answers) {
       await sleep(store.userSettings.solveInterval);
       switch (answer.type) {
         case "et-tof":
-          let tofOption = void 0;
           switch (answer.text) {
             case "t":
             case "T":
@@ -2697,7 +2702,7 @@ var __publicField = (obj, key, value) => {
                         innerSpan.dispatchEvent(new MouseEvent('click', clickEvt));
                     }
                 } catch (e) {
-                    console.error("Angular 信号注入失败", e);
+                    logger.error("Angular 信号注入失败", e);
                     // 保底方案
                     innerSpan.textContent = targetText;
                 }
@@ -2712,7 +2717,8 @@ var __publicField = (obj, key, value) => {
                 }, 200);
             })();
             blankOrder++;
-            break;}
+            break;
+        }
         case "et-textarea":
           if (answer.text.length) {
             ready_in(textareaOnPaper[textareaOrder]);
@@ -2729,8 +2735,6 @@ var __publicField = (obj, key, value) => {
           selectOrder++;
           break;
         case "et-choice":
-          let targetOption, options, optionCount;
-          let spanFlag = false;
           try {
             options = answer.text.split(",");
           } catch (error) {
@@ -2842,7 +2846,7 @@ var __publicField = (obj, key, value) => {
     while (practiceContainer.classList.contains('visible')) {
         // 如果看到结算界面（Ending），停止循环
         if (practiceContainer.querySelector('.ending.current')) {
-            console.log("词汇练习已完成");
+            logger.debug("词汇练习已完成");
             break;
         }
 
@@ -2858,7 +2862,7 @@ var __publicField = (obj, key, value) => {
                 // 即使不点击，正确的 li 也会由于 angular 的 key 匹配而带有 "key" 这个 class
                 const correctLi = currentItem.querySelector('li.key');
                 if (correctLi) {
-                    console.log("点击正确选项:", correctLi.textContent.trim());
+                    logger.debug("点击正确选项:", correctLi.textContent.trim());
                     correctLi.click();
                 } 
                 
