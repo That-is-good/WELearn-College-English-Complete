@@ -1,6 +1,6 @@
 # WELEARN自动做题脚本(使用篡改猴安装)
-- 安装WELearnHelper.user.js
-- 对于WELearnAutoFill.user.js适用于新大学英语视听说大部分不兼容
+- 安装WELearnHelper.user.js（原项目）
+- 对于WELearnAutoFill.user.js适用于新大学英语视听说等, 大部分不兼容（本地获取答案，不依赖题库）
 ## 能自动做什么？
 - 可以完成判断题、问答题+填空题、下拉选择题、选择题、连线题、单词题、标记题、录音题、跟读题、对话题。
 ## 对原项目的修改
