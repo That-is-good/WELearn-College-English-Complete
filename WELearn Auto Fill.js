@@ -140,11 +140,18 @@ function WriteConsole(...msg) {
             if (!key && ctrl && ctrl.key) key = ctrl.key[0];
             if (!key) return;
             const isTrue = key.toLowerCase() === 't';
-            const labels = el.querySelectorAll('label, .option, .choice-item');
+            // 修正选择器：选择 .controls 下的直接 span 子元素（即 T / F 按钮）
+            const labels = el.querySelectorAll('.controls > span');
             labels.forEach(label => {
+                // 提取纯文本（去除多余空格，转为小写）
                 const text = label.textContent.trim().toLowerCase();
-                if ((isTrue && (text.includes('true') || text.includes('对') || text.includes('正确'))) ||
-                    (!isTrue && (text.includes('false') || text.includes('错') || text.includes('错误')))) {
+                // 判断该选项是否与正确答案匹配
+                // 匹配规则：如果答案是 T，则匹配文本为 't' 或 'true' 或包含 '对'/'正确'
+                // 如果答案是 F，则匹配文本为 'f' 或 'false' 或包含 '错'/'错误'
+                const isMatch = isTrue
+                    ? (text === 't' || text === 'true' || text.includes('对') || text.includes('正确'))
+                    : (text === 'f' || text === 'false' || text.includes('错') || text.includes('错误'));
+                if (isMatch) {
                     label.classList.add(`welearn-answer-${type}`);
                     label.style.backgroundColor = '#90ee90';
                     label.style.border = '2px solid #2e7d32';
